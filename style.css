@@ -1,120 +1,64 @@
-:root {
-  --bg-color: #f4f1ee;
-  --card-color: #ffffff;
-  --text-color: #1a1a1a;
-  --approved-color: #c8e6c9;
-  --available-color: #fff9c4;
-  --locked-color: #e0e0e0;
-  --icon-color: #2e7d32;
-  --dark-bg: #121212;
-  --dark-card: #1e1e1e;
-  --dark-text: #f0f0f0;
-  --transition: all 0.3s ease;
-}
-
 body {
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  font-family: 'Segoe UI', sans-serif;
-  margin: 0;
-  padding: 0;
-  transition: var(--transition);
+  font-family: sans-serif;
+  margin: 20px;
+  background: #fefefe;
 }
 
 header, footer {
   text-align: center;
-  padding: 1em;
-  background-color: #ccc;
-  color: #000;
+  margin-bottom: 20px;
 }
 
-#malla-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1rem;
-  padding: 2rem;
+.semestre {
+  margin-bottom: 30px;
+}
+
+.semestre h2 {
+  margin-bottom: 10px;
+  background: #eee;
+  padding: 5px;
+  border-radius: 6px;
 }
 
 .curso {
-  position: relative;
-  background-color: var(--locked-color);
-  border-radius: 1rem;
-  padding: 1rem;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-  transition: var(--transition);
-  cursor: default;
-  user-select: none;
-}
-
-.curso.disponible {
-  background-color: var(--available-color);
-  cursor: pointer;
-}
-
-.curso.aprobado {
-  background-color: var(--approved-color);
-  text-decoration: line-through;
-  color: gray;
-}
-
-.curso .estado {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background-color: gray;
-}
-
-.curso.aprobado .estado {
-  background-color: green;
-}
-
-.curso.disponible .estado {
-  background-color: orange;
-}
-
-.curso.bloqueado .estado {
-  background-color: gray;
-}
-
-.curso:hover::after {
-  content: attr(data-prerrequisitos);
-  position: absolute;
-  bottom: -1.8rem;
-  left: 0;
-  right: 0;
-  background: #000000dd;
-  color: white;
-  padding: 0.2rem 0.5rem;
-  font-size: 0.75rem;
-  border-radius: 0.5rem;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 5px;
+  width: auto;
+  max-width: 200px;
   text-align: center;
+  cursor: pointer;
+  transition: 0.2s;
+  font-size: 0.9rem;
+}
+
+.curso:hover {
+  transform: scale(1.05);
+  background-color: #f9f9f9;
+}
+
+.aprobado {
+  background-color: #c6f6c6;
+  text-decoration: line-through;
+}
+
+.disponible {
+  background-color: #cce5ff;
+}
+
+.bloqueado {
+  background-color: #f0f0f0;
+  color: #aaa;
+  cursor: not-allowed;
 }
 
 #resumen, #filtros {
-  margin: 1rem auto;
-  text-align: center;
+  margin: 10px 0;
 }
 
 button {
-  padding: 0.4rem 1rem;
-  border-radius: 0.5rem;
-  border: none;
+  padding: 5px 10px;
   cursor: pointer;
-  background: #444;
-  color: white;
 }
-
-select {
-  margin-left: 0.5rem;
-  padding: 0.2rem;
-}
-
-footer {
-  margin-top: 2rem;
-}
-
-/* Modo oscuro (opcional*
-
