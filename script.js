@@ -408,4 +408,116 @@ const cursos = [
     prerequisitos: ["160 o mas creditos aprobados"]
   }
 ];
+let cursosAprobados = new Set();
+
+const contenedor = document.getElementById("root");
+const creditosAprobadosSpan = document.getElementById("creditos-aprobados");
+const creditosTotalesSpan = document.getElementById("creditos-totales");
+const porcentajeCompletadoSpan = document.getElementById("porcentaje-completado");
+const semestreActualSpan = document.getElementById("semestre-actual");
+const filtroEstado = document.getElementById("filtro-estado");
+const botonResetear = document.getElementById("resetear");
+
+// Agrupar por semestre
+const cursosPorSemestre = {};
+cursos.forEach(curso => {
+  if (!cursosPorSemestre[curso.semestre]) {
+    cursosPorSemestre[curso.semestre] = [];
+  }
+  cursosPorSemestre[curso.semestre].push(curso);
+});
+
+// Funciones de estado
+function contarCreditosAprobados() {
+  return cursos
+    .filter(c => cursosAprobados.has(c.nombre))
+    .reduce((acc, c) => acc + c.creditos, 0);
+}
+
+function contarCreditosTotales() {
+  return cursos.reduce((acc, c) => acc + c.creditos, 0);
+}
+
+function estaDisponible(curso) {
+  return curso.prerequisitos.every(pr =>
+    pr.includes("creditos")
+      ? contarCreditosAprobados() >= parseInt(pr)
+      : cursosAprobados.has(pr)
+  );
+}
+
+function estadoCurso(curso) {
+  if (cursosAprobados.has(curso.nombre)) return "aprobado";
+  if (estaDisponible(curso)) return "disponible";
+  return "bloqueado";
+}
+
+// Renderizar malla
+function renderMalla() {
+  contenedor.innerHTML = "";
+  for (let semestre in cursosPorSemestre) {
+    const bloque = document.createElement("section");
+    bloque.className = "semestre";
+
+    const titulo = document.createElement("h2");
+    titulo.textContent = `Semestre ${semestre}`;
+    bloque.appendChild(titulo);
+
+    cursosPorSemestre[semestre].forEach(curso => {
+      const estado = estadoCurso(curso);
+
+      if (filtroEstado.value !== "todos" && filtroEstado.value !== estado) return;
+
+      const div = document.createElement("div");
+      div.className = `curso ${estado}`;
+      div.textContent = curso.nombre;
+      div.title = `${curso.creditos} créditos` +
+        (curso.prerequisitos.length
+          ? `\nPre: ${curso.prerequisitos.join(", ")}`
+          : "");
+
+      div.addEventListener("click", () => {
+        if (estado === "disponible" || estado === "aprobado") {
+          if (cursosAprobados.has(curso.nombre)) {
+            cursosAprobados.delete(curso.nombre);
+          } else {
+            cursosAprobados.add(curso.nombre);
+          }
+          renderMalla();
+        }
+      });
+
+      bloque.appendChild(div);
+    });
+
+    contenedor.appendChild(bloque);
+  }
+
+  actualizarResumen();
+}
+
+// Actualizar resumen
+function actualizarResumen() {
+  const aprobados = contarCreditosAprobados();
+  const totales = contarCreditosTotales();
+  const porcentaje = Math.round((aprobados / totales) * 100);
+  const semestreEstimado = Math.ceil((aprobados / totales) * 10);
+
+  creditosAprobadosSpan.textContent = aprobados;
+  creditosTotalesSpan.textContent = totales;
+  porcentajeCompletadoSpan.textContent = `${porcentaje}%`;
+  semestreActualSpan.textContent = semestreEstimado;
+}
+
+// Eventos
+filtroEstado.addEventListener("change", renderMalla);
+botonResetear.addEventListener("click", () => {
+  if (confirm("¿Seguro que quieres reiniciar tu malla?")) {
+    cursosAprobados.clear();
+    renderMalla();
+  }
+});
+
+// Iniciar
+renderMalla();
 
