@@ -408,7 +408,7 @@ const cursos = [
     prerequisitos: ["160 o mas creditos aprobados"]
   }
 ];
-let cursosAprobados = new Set();
+let cursosAprobados = new Set(JSON.parse(localStorage.getItem("cursosAprobados")) || []);
 
 const contenedor = document.getElementById("root");
 const creditosAprobadosSpan = document.getElementById("creditos-aprobados");
@@ -476,16 +476,18 @@ function renderMalla() {
           ? `\nPre: ${curso.prerequisitos.join(", ")}`
           : "");
 
-      div.addEventListener("click", () => {
-        if (estado === "disponible" || estado === "aprobado") {
-          if (cursosAprobados.has(curso.nombre)) {
-            cursosAprobados.delete(curso.nombre);
-          } else {
-            cursosAprobados.add(curso.nombre);
-          }
-          renderMalla();
-        }
-      });
+     div.addEventListener("click", () => {
+  if (estado === "disponible" || estado === "aprobado") {
+    if (cursosAprobados.has(curso.nombre)) {
+      cursosAprobados.delete(curso.nombre);
+    } else {
+      cursosAprobados.add(curso.nombre);
+    }
+
+    localStorage.setItem("cursosAprobados", JSON.stringify([...cursosAprobados]));
+    renderMalla();
+  }
+});
 
       bloque.appendChild(div);
     });
@@ -514,9 +516,11 @@ filtroEstado.addEventListener("change", renderMalla);
 botonResetear.addEventListener("click", () => {
   if (confirm("¿Seguro que quieres reiniciar tu malla?")) {
     cursosAprobados.clear();
+    localStorage.removeItem("cursosAprobados");
     renderMalla();
   }
 });
+
 
 // Iniciar
 renderMalla();
