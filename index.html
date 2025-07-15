@@ -1,1 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Malla Ingeniería Mecánica Eléctrica</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Malla Curricular: Ingeniería Mecánica Eléctrica</h1>
+    <div id="resumen">
+      <p>🔢 Créditos Aprobados: <span id="creditos-aprobados">0</span> / <span id="creditos-totales">0</span></p>
+      <p>📊 % Completado: <span id="porcentaje-completado">0%</span></p>
+      <p>🎓 Semestre Estimado: <span id="semestre-actual">1</span></p>
+      <button id="resetear">🔄 Reiniciar</button>
+    </div>
+    <div id="filtros">
+      <label>📂 Filtrar: 
+        <select id="filtro-estado">
+          <option value="todos">Todos</option>
+          <option value="aprobado">Aprobados</option>
+          <option value="disponible">Desbloqueados</option>
+          <option value="bloqueado">Bloqueados</option>
+        </select>
+      </label>
+    </div>
+  </header>
+
+  <main id="malla-container"></main>
+
+  <footer>
+    <p>Hecho con 💻 por Suhayl</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
 
